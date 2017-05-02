@@ -9,7 +9,7 @@ I plan on publishing to maven central soon but in the meantime, clone this proje
 <plugin>
     <groupId>jebeaudet</groupId>
     <artifactId>flyway-validator-maven-plugin</artifactId>
-    <version>0.1</version>
+    <version>0.2</version>
     <executions>
         <execution>
             <goals>
@@ -33,7 +33,7 @@ This is done in the plugin configuration (defaults value shown here) :
 <plugin>
     <groupId>com.coveo</groupId>
     <artifactId>flyway-validator-maven-plugin</artifactId>
-    <version>0.0.5-SNAPSHOT</version>
+    <version>0.2</version>
     <configuration>
         <rootPath>/src/main/resources</rootPath>
         <sqlRevisesRootPath>db/migration</sqlRevisesRootPath>
@@ -50,7 +50,7 @@ Here's an example of a failed build :
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD FAILURE
 [INFO] ------------------------------------------------------------------------
-[ERROR] Failed to execute goal com.coveo:flyway-validator-maven-plugin:0.0.5-SNAPSHOT:validate-flyway-revises (default) on project test-project:
+[ERROR] Failed to execute goal com.coveo:flyway-validator-maven-plugin:0.2:validate-flyway-revises (default) on project test-project:
 [ERROR] ------------------------------------------------------------------------
 [ERROR] Duplicate migration version(s) found : [1.0, 1.0.1].
 [ERROR] Details :
