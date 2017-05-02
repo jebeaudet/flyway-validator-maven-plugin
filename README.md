@@ -22,7 +22,13 @@ I plan on publishing to maven central soon but in the meantime, clone this proje
 This will make the plugin run in the default `validate` phase of Maven.
 
 ## Configuration
-The root path, SQL migration path for .sql migrations and base package for .java migrations can be configured like this (defaults value shown here) : 
+The following properties can be configured : 
+* Root path of source files;
+* Path for SQL migrations;
+* Base package for .java migrations;
+* Flag to fail the build if invalid SQL filenames are found.
+
+This is done in the plugin configuration (defaults value shown here) : 
 ```
 <plugin>
     <groupId>com.coveo</groupId>
@@ -32,6 +38,7 @@ The root path, SQL migration path for .sql migrations and base package for .java
         <rootPath>/src/main/resources</rootPath>
         <sqlRevisesRootPath>db/migration</sqlRevisesRootPath>
         <javaRevisesPackage>db.migration</javaRevisesPackage>
+        <abortBuildOnInvalidFilenames>true</abortBuildOnInvalidFilenames>
     </configuration>
 [...]
 </plugin>

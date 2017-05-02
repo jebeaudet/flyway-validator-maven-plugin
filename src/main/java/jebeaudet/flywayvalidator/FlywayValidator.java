@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -34,7 +35,7 @@ public class FlywayValidator extends AbstractMojo
     protected MavenProject mavenProject;
 
     /**
-     * Root path of resources. Defaults to <b>src/main/resources</b>.
+     * Root path of source files. Defaults to <b>src/main/resources</b>.
      */
     @Parameter(property = "validate-flyway-revises.rootPath", defaultValue = "src/main/resources", required = true)
     private String rootPath;
@@ -51,8 +52,16 @@ public class FlywayValidator extends AbstractMojo
     @Parameter(property = "validate-flyway-revises.javaRevisesPackage", defaultValue = "db.migration", required = true)
     private String javaRevisesPackage;
 
+    /**
+     * Flag whether the build should be aborted if SQL revises are found without the "V" prefix or without the ".sql" extension. Defaults to <b>true</b>.
+     */
+    @Parameter(property = "validate-flyway-revises.abortBuildOnInvalidFilenames",
+               defaultValue = "true",
+               required = true)
+    private boolean abortBuildOnInvalidFilenames;
+
     @Override
-    public void execute() throws DuplicateVersionFailureException, MojoExecutionException
+    public void execute() throws MojoFailureException, MojoExecutionException
     {
         List<FlywayMigration> sqlFlywayMigrations = getSqlFlywayMigrationFromPath(String.join(SLASH,
                                                                                               rootPath,
@@ -132,17 +141,37 @@ public class FlywayValidator extends AbstractMojo
     }
 
     private List<FlywayMigration> getSqlFlywayMigrationFromPath(String path)
+            throws InvalidFlywayMigrationFilenameFormatFailureException
     {
         File folder = new File(String.join(SLASH, mavenProject.getBasedir().getPath(), path));
         Optional<File[]> filesArray = Optional.ofNullable(folder.listFiles());
 
-        return filesArray.map(fileArray -> Arrays.stream(fileArray)
-                                                 .filter(file -> file.isFile())
-                                                 .map(filename -> filename.getName())
-                                                 .filter(filename -> filename.endsWith(".sql")
-                                                         && filename.startsWith("V"))
-                                                 .map(filename -> new FlywayMigration().withFilename(filename))
-                                                 .collect(Collectors.toList()))
-                         .orElseGet(() -> new ArrayList<>());
+        List<String> filenames = filesArray.map(fileArray -> Arrays.stream(fileArray)
+                                                                   .filter(file -> file.isFile())
+                                                                   .map(filename -> filename.getName())
+                                                                   .collect(Collectors.toList()))
+                                           .orElseGet(() -> new ArrayList<>());
+
+        validateFilenameFormat(filenames);
+
+        return filenames.stream()
+                        .map(filename -> new FlywayMigration().withFilename(filename))
+                        .collect(Collectors.toList());
+    }
+
+    private void validateFilenameFormat(List<String> filenames)
+            throws InvalidFlywayMigrationFilenameFormatFailureException
+    {
+        List<String> invalidFilenames = filenames.stream()
+                                                 .filter(filename -> !filename.endsWith(".sql")
+                                                         || !filename.startsWith("V"))
+                                                 .collect(Collectors.toList());
+
+        if (!invalidFilenames.isEmpty()) {
+            getLog().warn(String.format("Invalid SQL revise filenames found : %s.", invalidFilenames));
+            if (abortBuildOnInvalidFilenames) {
+                throw new InvalidFlywayMigrationFilenameFormatFailureException(this, invalidFilenames);
+            }
+        }
     }
 }
