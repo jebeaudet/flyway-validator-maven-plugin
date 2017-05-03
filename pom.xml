@@ -4,16 +4,37 @@
 
     <groupId>io.github.jebeaudet</groupId>
     <artifactId>flyway-validator-maven-plugin</artifactId>
-    <version>0.3-SNAPSHOT</version>
+    <version>0.3</version>
     <packaging>maven-plugin</packaging>
 
     <name>flyway-validator-maven-plugin</name>
+    <description>Maven plugin to fail a build when duplicate flyway revises are found.</description>
+    <url>https://github.com/jebeaudet/flyway-validator-maven-plugin</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
         <maven.version>3.3.9</maven.version>
     </properties>
+
+    <licenses>
+        <license>
+            <name>MIT</name>
+            <url>https://opensource.org/licenses/MIT</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Jacques-Etienne Beaudet</name>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git@github.com:jebeaudet/flyway-validator-maven-plugin.git</connection>
+        <developerConnection>scm:git@github.com:jebeaudet/flyway-validator-maven-plugin.git</developerConnection>
+        <url>https://github.com/jebeaudet/flyway-validator-maven-plugin</url>
+    </scm>
 
     <dependencies>
         <dependency>
@@ -46,6 +67,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -64,4 +86,50 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.6</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+    
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+    </distributionManagement>
 </project>
