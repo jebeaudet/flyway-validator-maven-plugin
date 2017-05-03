@@ -1,15 +1,18 @@
+[![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/jebeaudet/flyway-validator-maven-plugin/blob/master/LICENSE)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.jebeaudet/flyway-validator-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.jebeaudet/flyway-validator-maven-plugin)
+
 # Flyway validator maven plugin
 This plugin will help you avoid duplicate revises when working with [Flyway](https://flywaydb.org/). Duplicate revises sometimes happen when concurrent PR are being merged or lunatic developers forget to validate their old PR against the current codebase.
 
 By using this plugin, the build will fail when problematic version numbers are found in the project.
 
 ## How to use
-I plan on publishing to maven central soon but in the meantime, clone this project and publish it to your local maven repo. Then, add this to your project/parent pom.xml : 
+The plugin is available on Maven central, just add this to your project or parent pom.xml : 
 ```
 <plugin>
     <groupId>io.github.jebeaudet</groupId>
     <artifactId>flyway-validator-maven-plugin</artifactId>
-    <version>0.2</version>
+    <version>0.3.1</version>
     <executions>
         <execution>
             <goals>
@@ -34,7 +37,7 @@ This is done in the plugin configuration (default values shown here) :
 <plugin>
     <groupId>io.github.jebeaudet</groupId>
     <artifactId>flyway-validator-maven-plugin</artifactId>
-    <version>0.2</version>
+    <version>0.3.1</version>
     <configuration>
         <rootPath>/src/main/resources</rootPath>
         <sqlRevisesRootPath>db/migration</sqlRevisesRootPath>
@@ -52,7 +55,7 @@ Here's an example of a failed build :
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD FAILURE
 [INFO] ------------------------------------------------------------------------
-[ERROR] Failed to execute goal io.github.jebeaudet:flyway-validator-maven-plugin:0.2:validate-flyway-revises (default) on project test-project:
+[ERROR] Failed to execute goal io.github.jebeaudet:flyway-validator-maven-plugin:0.3.1:validate-flyway-revises (default) on project test-project:
 [ERROR] ------------------------------------------------------------------------
 [ERROR] Duplicate migration version(s) found : [1.0, 1.0.1].
 [ERROR] Details :
