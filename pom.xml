@@ -4,7 +4,7 @@
 
     <groupId>io.github.jebeaudet</groupId>
     <artifactId>flyway-validator-maven-plugin</artifactId>
-    <version>0.3.1</version>
+    <version>0.3.2</version>
     <packaging>maven-plugin</packaging>
 
     <name>flyway-validator-maven-plugin</name>
