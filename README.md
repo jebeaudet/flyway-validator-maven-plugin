@@ -22,7 +22,7 @@ The plugin is available on Maven central, just add this to your project or paren
     </executions>
 </plugin>
 ```
-This will make the plugin run in the default `validate` phase of Maven.
+This will make the plugin run in the default `verify` phase of Maven. While you're free to change the default phase, be aware that to support java revises, this plugin needs to run after the `compile` phase.
 
 ## Configuration
 The following properties can be configured : 

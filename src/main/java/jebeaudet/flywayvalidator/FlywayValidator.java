@@ -25,7 +25,7 @@ import org.apache.maven.project.MavenProject;
 
 import com.google.common.reflect.ClassPath;
 
-@Mojo(name = "validate-flyway-revises", defaultPhase = LifecyclePhase.VALIDATE)
+@Mojo(name = "validate-flyway-revises", defaultPhase = LifecyclePhase.VERIFY)
 public class FlywayValidator extends AbstractMojo
 {
     private static final String ERROR_MESSAGE = "Error while resolving java migration filenames!";
@@ -86,6 +86,8 @@ public class FlywayValidator extends AbstractMojo
                                                                                    flywayMigrationSet);
             throw new DuplicateVersionFailureException(this, duplicateVersions);
         }
+
+        getLog().info("No problematic flyway revise found!");
     }
 
     private List<FlywayMigration> getDuplicateFlywayMigrations(List<FlywayMigration> flywayMigrationList,
