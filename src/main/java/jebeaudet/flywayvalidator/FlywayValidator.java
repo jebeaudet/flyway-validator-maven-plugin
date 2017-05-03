@@ -155,7 +155,7 @@ public class FlywayValidator extends AbstractMojo
         Optional<File[]> filesArray = Optional.ofNullable(folder.listFiles());
 
         List<String> filenames = filesArray.map(fileArray -> Arrays.stream(fileArray)
-                                                                   .filter(file -> file.isFile())
+                                                                   .filter(file -> file.isFile() && !file.isHidden())
                                                                    .map(filename -> filename.getName())
                                                                    .filter(filename -> !filename.matches(ignoredFileRegex))
                                                                    .collect(Collectors.toList()))
