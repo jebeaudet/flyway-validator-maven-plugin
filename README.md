@@ -12,7 +12,7 @@ The plugin is available on Maven central, just add this to your project or paren
 <plugin>
   <groupId>io.github.jebeaudet</groupId>
   <artifactId>flyway-validator-maven-plugin</artifactId>
-  <version>0.3.3</version>
+  <version>0.3.4</version>
   <executions>
     <execution>
       <goals>
@@ -37,7 +37,7 @@ This is done in the plugin configuration (default values shown here) :
 <plugin>
     <groupId>io.github.jebeaudet</groupId>
     <artifactId>flyway-validator-maven-plugin</artifactId>
-    <version>0.3.3</version>
+    <version>0.3.4</version>
     <configuration>
         <rootPath>/src/main/resources</rootPath>
         <sqlRevisesRootPath>db/migration</sqlRevisesRootPath>
@@ -55,7 +55,7 @@ Here's an example of a failed build :
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD FAILURE
 [INFO] ------------------------------------------------------------------------
-[ERROR] Failed to execute goal io.github.jebeaudet:flyway-validator-maven-plugin:0.3.3:validate-flyway-revises (default) on project test-project:
+[ERROR] Failed to execute goal io.github.jebeaudet:flyway-validator-maven-plugin:0.3.4:validate-flyway-revises (default) on project test-project:
 [ERROR] ------------------------------------------------------------------------
 [ERROR] Duplicate migration version(s) found : [1.0, 1.0.1].
 [ERROR] Details :
