@@ -25,7 +25,7 @@ import org.apache.maven.project.MavenProject;
 
 import com.google.common.reflect.ClassPath;
 
-@Mojo(name = "validate-flyway-revises", defaultPhase = LifecyclePhase.VERIFY)
+@Mojo(name = "validate-flyway-revises", defaultPhase = LifecyclePhase.VERIFY, threadSafe = true)
 public class FlywayValidator extends AbstractMojo
 {
     private static final String ERROR_MESSAGE = "Error while resolving java migration filenames!";

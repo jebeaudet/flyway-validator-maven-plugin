@@ -1,6 +1,3 @@
-/**
- * Copyright (c) 2011 - 2017, Coveo Solutions Inc.
- */
 package jebeaudet.flywayvalidator;
 
 public class FlywayMigration

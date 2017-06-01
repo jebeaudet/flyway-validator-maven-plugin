@@ -1,6 +1,3 @@
-/**
- * Copyright (c) 2011 - 2017, Coveo Solutions Inc.
- */
 package jebeaudet.flywayvalidator;
 
 import java.util.Collection;
