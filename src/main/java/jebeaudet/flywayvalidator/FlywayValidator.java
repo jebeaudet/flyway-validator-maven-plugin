@@ -9,9 +9,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
@@ -23,6 +26,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.reflect.ClassPath;
 
 @Mojo(name = "validate-flyway-revises", defaultPhase = LifecyclePhase.VERIFY, threadSafe = true)
@@ -30,6 +34,11 @@ public class FlywayValidator extends AbstractMojo
 {
     private static final String ERROR_MESSAGE = "Error while resolving java migration filenames!";
     private static final String SLASH = "/";
+    private static final Pattern VERSION_SEPARATOR_PATTERN = Pattern.compile("V(.+)__.+\\.sql");
+    private static final Map<VersionSeparator, Pattern> VALID_SQL_FILENAME_MAP = ImmutableMap.of(VersionSeparator.PERIOD,
+                                                                                                 Pattern.compile("V((\\d)+\\.?)+__.+\\.sql$"),
+                                                                                                 VersionSeparator.UNDERSCORE,
+                                                                                                 Pattern.compile("V((\\d)+_)+_.+\\.sql$"));
 
     @Parameter(defaultValue = "${session.currentProject}", required = true, readonly = true)
     private MavenProject mavenProject;
@@ -171,10 +180,11 @@ public class FlywayValidator extends AbstractMojo
     private void validateFilenameFormat(List<String> filenames)
             throws InvalidFlywayMigrationFilenameFormatFailureException
     {
-        List<String> invalidFilenames = filenames.stream()
-                                                 .filter(filename -> !filename.endsWith(".sql")
-                                                         || !filename.startsWith("V"))
-                                                 .collect(Collectors.toList());
+        List<String> invalidFilenames = filenames.stream().filter(filename -> {
+            Optional<VersionSeparator> versionSeparator = getVersionSeparatorFromFilename(filename);
+            return !versionSeparator.isPresent()
+                    || !VALID_SQL_FILENAME_MAP.get(versionSeparator.get()).matcher(filename).matches();
+        }).collect(Collectors.toList());
 
         if (!invalidFilenames.isEmpty()) {
             getLog().warn(String.format("Invalid SQL revise filenames found : %s.", invalidFilenames));
@@ -182,5 +192,14 @@ public class FlywayValidator extends AbstractMojo
                 throw new InvalidFlywayMigrationFilenameFormatFailureException(this, invalidFilenames);
             }
         }
+    }
+
+    private Optional<VersionSeparator> getVersionSeparatorFromFilename(String filename)
+    {
+        Matcher matcher = VERSION_SEPARATOR_PATTERN.matcher(filename);
+        if (matcher.find()) {
+            return Optional.of(matcher.group(1).contains(".") ? VersionSeparator.PERIOD : VersionSeparator.UNDERSCORE);
+        }
+        return Optional.empty();
     }
 }

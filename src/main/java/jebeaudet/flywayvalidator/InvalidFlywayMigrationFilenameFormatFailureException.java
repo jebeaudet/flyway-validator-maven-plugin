@@ -17,7 +17,7 @@ public class InvalidFlywayMigrationFilenameFormatFailureException extends MojoFa
     {
         StringBuilder sb = new StringBuilder();
         sb.append("\n------------------------------------------------------------------------\n");
-        sb.append("Invalid filename format found!\nProblematic filenames : \n");
+        sb.append("Invalid filename format found(It should look like: V1_2__Description.sql or V1.2.3__Description.sql)!\nProblematic filenames : \n");
         for (String filename : filenames) {
             sb.append(filename);
             sb.append("\n");
