@@ -12,7 +12,7 @@ The plugin is available on Maven central, just add this to your project or paren
 <plugin>
   <groupId>io.github.jebeaudet</groupId>
   <artifactId>flyway-validator-maven-plugin</artifactId>
-  <version>0.4</version>
+  <version>0.4.1</version>
   <executions>
     <execution>
       <goals>
