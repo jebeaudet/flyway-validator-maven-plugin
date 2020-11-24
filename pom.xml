@@ -4,7 +4,7 @@
 
     <groupId>io.github.jebeaudet</groupId>
     <artifactId>flyway-validator-maven-plugin</artifactId>
-    <version>0.4</version>
+    <version>0.4.1</version>
     <packaging>maven-plugin</packaging>
 
     <name>flyway-validator-maven-plugin</name>
@@ -56,7 +56,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>21.0</version>
+            <version>24.1.1-jre</version>
         </dependency>
 
 
@@ -82,7 +82,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
-                <version>3.3</version>
+                <version>3.6.0</version>
             </plugin>
         </plugins>
     </build>
@@ -98,7 +98,7 @@
                         <version>1.6.8</version>
                         <extensions>true</extensions>
                         <configuration>
-                            <serverId>ossrh</serverId>
+                            <serverId>sonatype_perso</serverId>
                             <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                             <autoReleaseAfterClose>true</autoReleaseAfterClose>
                         </configuration>
