@@ -9,18 +9,22 @@ By using this plugin, the build will fail when problematic version numbers are f
 ## How to use
 The plugin is available on Maven central, just add this to your project or parent pom.xml : 
 ```xml
-<plugin>
-  <groupId>io.github.jebeaudet</groupId>
-  <artifactId>flyway-validator-maven-plugin</artifactId>
-  <version>0.4.1</version>
-  <executions>
-    <execution>
-      <goals>
-        <goal>validate-flyway-revises</goal>
-      </goals>
-    </execution>
-  </executions>
-</plugin>
+<build>
+  </plugins>
+    <plugin>
+      <groupId>io.github.jebeaudet</groupId>
+      <artifactId>flyway-validator-maven-plugin</artifactId>
+      <version>0.4.1</version>
+      <executions>
+        <execution>
+          <goals>
+            <goal>validate-flyway-revises</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+  </plugins>
+</build>
 ```
 This will make the plugin run in the default `verify` phase of Maven. While you're free to change the default phase, be aware that to support java revises, this plugin needs to run after the `compile` phase.
 
