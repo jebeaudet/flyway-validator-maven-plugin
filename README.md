@@ -41,7 +41,7 @@ This is done in the plugin configuration (default values shown here) :
 <plugin>
     <groupId>io.github.jebeaudet</groupId>
     <artifactId>flyway-validator-maven-plugin</artifactId>
-    <version>0.3.4</version>
+    <version>0.4.1</version>
     <configuration>
         <rootPath>/src/main/resources</rootPath>
         <sqlRevisesRootPath>db/migration</sqlRevisesRootPath>
