@@ -14,7 +14,7 @@ The plugin is available on Maven central, just add this to your project or paren
     <plugin>
       <groupId>io.github.jebeaudet</groupId>
       <artifactId>flyway-validator-maven-plugin</artifactId>
-      <version>0.4.1</version>
+      <version>0.4.2</version>
       <executions>
         <execution>
           <goals>
@@ -41,7 +41,7 @@ This is done in the plugin configuration (default values shown here) :
 <plugin>
     <groupId>io.github.jebeaudet</groupId>
     <artifactId>flyway-validator-maven-plugin</artifactId>
-    <version>0.4.1</version>
+    <version>0.4.2</version>
     <configuration>
         <rootPath>/src/main/resources</rootPath>
         <sqlRevisesRootPath>db/migration</sqlRevisesRootPath>
