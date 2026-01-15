@@ -50,6 +50,12 @@ public class FlywayValidator extends AbstractMojo
     private String rootPath;
 
     /**
+     * The Baseline migrations prefix. Defaults to <b>B</b>.
+     */
+    @Parameter(property = "validate-flyway-revises.baselineMigrationsPrefix", defaultValue = "B", required = true)
+    private String baselineMigrationsPrefix;
+
+    /**
      * Root path of SQL revises. Defaults to <b>db/migration</b>.
      */
     @Parameter(property = "validate-flyway-revises.sqlRevisesRootPath", defaultValue = "db/migration", required = true)
@@ -103,9 +109,9 @@ public class FlywayValidator extends AbstractMojo
                                                                Set<FlywayMigration> flywayMigrationSet)
     {
         ArrayList<FlywayMigration> duplicates = new ArrayList<>(flywayMigrationList);
-        flywayMigrationSet.stream().forEach(version -> duplicates.remove(version));
+        flywayMigrationSet.forEach(duplicates::remove);
         return flywayMigrationList.stream()
-                                  .filter(migration -> duplicates.contains(migration))
+                                  .filter(duplicates::contains)
                                   .collect(Collectors.toList());
     }
 
@@ -128,7 +134,7 @@ public class FlywayValidator extends AbstractMojo
                 return ClassPath.from(urlClassLoader)
                                 .getTopLevelClasses(basePackage)
                                 .stream()
-                                .map(clazz -> clazz.getSimpleName())
+                                .map(ClassPath.ClassInfo::getSimpleName)
                                 .filter(className -> className.startsWith("V"))
                                 .map(className -> new FlywayMigration().withFilename(className + ".java"))
                                 .collect(Collectors.toList());
@@ -146,7 +152,7 @@ public class FlywayValidator extends AbstractMojo
 
             //Strip comments if present
             int beginCommentIndex = filename.indexOf("__");
-            String version = beginCommentIndex == -1 ? filename.substring(1, filename.length())
+            String version = beginCommentIndex == -1 ? filename.substring(1)
                                                      : filename.substring(1, beginCommentIndex);
 
             //Transform java revise nomenclature V1_0_1 into V1.0.1
@@ -165,10 +171,11 @@ public class FlywayValidator extends AbstractMojo
 
         List<String> filenames = filesArray.map(fileArray -> Arrays.stream(fileArray)
                                                                    .filter(file -> file.isFile() && !file.isHidden())
-                                                                   .map(filename -> filename.getName())
+                                                                   .map(File::getName)
                                                                    .filter(filename -> !filename.matches(ignoredFileRegex))
+                                                                   .filter(filename -> !filename.startsWith(baselineMigrationsPrefix))
                                                                    .collect(Collectors.toList()))
-                                           .orElseGet(() -> new ArrayList<>());
+                                           .orElseGet(ArrayList::new);
 
         validateFilenameFormat(filenames);
 
