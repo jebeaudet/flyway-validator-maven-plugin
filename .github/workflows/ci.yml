@@ -25,4 +25,4 @@ jobs:
           cache: 'maven'
       
       - name: Build and verify with Maven
-        run: mvn clean verify
+        run: mvn clean verify --batch-mode --no-transfer-progress
