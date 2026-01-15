@@ -33,10 +33,10 @@ jobs:
           # Strip leading 'v' if present (e.g., v1.0.0 -> 1.0.0)
           VERSION="${VERSION#v}"
           echo "Setting version to: $VERSION"
-          mvn versions:set -DnewVersion="$VERSION" -DgenerateBackupPoms=false
+          mvn versions:set --batch-mode --no-transfer-progress -DnewVersion="$VERSION" -DgenerateBackupPoms=false
 
       - name: Build and verify with Maven
-        run: mvn clean deploy -P release
+        run: mvn clean deploy --batch-mode --no-transfer-progress -P release
         env:
           MAVEN_USERNAME: ${{ secrets.OSS_SONATYPE_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSS_SONATYPE_PASSWORD }}
